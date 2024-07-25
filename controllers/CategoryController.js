@@ -1,20 +1,19 @@
 const Category = require('../models/Category')
-const SubCategory = require('../models/SubCategory')
 const Product = require('../models/Product')
 const { validationResult } = require('express-validator')
 
-// const getAllCategories = async (req, res) => {
-//     try {
-//         const categories = await Category.find()
-//         if (!categories) {
-//             return res.status(404).json({ message: 'Kategoriya ne nayden'})
-//         }
-//         res.json(categories)
-//     } catch (err) {
-//         console.log(err)
-//         res.status(400).json({ error: 'Ne udalos polucit kategoriyi' });
-//     }
-// }
+const getAllCategories = async (req, res) => {
+    try {
+        const categories = await Category.find()
+        if (!categories) {
+            return res.status(404).json({ message: 'Kategoriya ne nayden'})
+        }
+        res.json(categories)
+    } catch (err) {
+        console.log(err)
+        res.status(400).json({ error: 'Ne udalos polucit kategoriyi' });
+    }
+}
 
 const getOneCategory = async (req, res) => {
     try {
@@ -88,4 +87,4 @@ const categoryUpdate = async (req, res) => {
     }
 }
 
-module.exports = { getOneCategory, categoryCreate, categoryDelete, categoryUpdate }
+module.exports = { getOneCategory, getAllCategories, categoryCreate, categoryDelete, categoryUpdate }

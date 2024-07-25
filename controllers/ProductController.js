@@ -1,18 +1,18 @@
 const Product = require('../models/Product')
 const { validationResult } = require('express-validator')
 
-// const getAllProducts = async (req, res) => {
-//     try {
-//         const products = await Product.find().populate('category_id', '_id name name_ru name_en')
-//         if (!products) {
-//             return res.status(404).json({ message: 'Netu produktow'})
-//         }
-//         res.json(products)
-//     } catch (err) {
-//         console.log(err)
-//         res.status(400).json({ error: 'Ne udalos polucit producty' });
-//     }
-// }
+const getAllProducts = async (req, res) => {
+    try {
+        const products = await Product.find().populate('category_id', '_id name name_ru name_en')
+        if (!products) {
+            return res.status(404).json({ message: 'Netu produktow'})
+        }
+        res.json(products)
+    } catch (err) {
+        console.log(err)
+        res.status(400).json({ error: 'Ne udalos polucit producty' });
+    }
+}
 
 const getOneProduct = async (req, res) => {
     try {
@@ -82,4 +82,4 @@ const productUpdate = async (req, res) => {
     }
 }
 
-module.exports = { getOneProduct, productCreate, productDelete, productUpdate }
+module.exports = { getAllProducts, getOneProduct, productCreate, productDelete, productUpdate }

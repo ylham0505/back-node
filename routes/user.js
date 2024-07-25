@@ -3,8 +3,8 @@ const router = Router()
 const jwt = require('jsonwebtoken')
 const { getMe, register, login, refreshToken } = require('../controllers/UserController')
 const { getOnebrand, getAllbrands } = require('../controllers/BrandController')
-const { getOneCategory } = require('../controllers/CategoryController')
-const { getOneProduct } = require('../controllers/ProductController')
+const { getOneCategory, getAllCategories } = require('../controllers/CategoryController')
+const { getOneProduct, getAllProducts } = require('../controllers/ProductController')
 const { orderCreate } = require('../controllers/OrderController')
 const { registerValidation, loginValidation,  } = require('../validations/Validations')
 const Category = require('../models/Category')
@@ -87,11 +87,11 @@ router.get('/brands',  getAllbrands)
 
 router.get('/brand/:id', getOnebrand)  //authenticateUser
 
-// router.get('/categories', getAllCategories)
+router.get('/categories', getAllCategories)
 
 router.get('/category/:id',  getOneCategory)  //authenticateUser
 
-// router.get('/products', getAllProducts)
+router.get('/products', getAllProducts)
 
 router.get('/product/:id', getOneProduct) //authenticateUser
 
