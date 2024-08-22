@@ -36,14 +36,15 @@ const getOnebrand = async (req, res) => {
 }
 
 const brandCreate = async (req, res) => {
-
+    console.log('Request body:', req.body);  // Логирование тела запроса
+    console.log('Request file:', req.file);
     if (!req.isAdmin) {
         return res.status(403).json({ message: 'You are not admin'})
     }
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-        return res.status(400).json(errors.array())
-    }
+    // const errors = validationResult(req)
+    // if (!errors.isEmpty()) {
+    //     return res.status(400).json(errors.array())
+    // }
 
     const { name } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
