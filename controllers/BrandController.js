@@ -37,17 +37,20 @@ const getOnebrand = async (req, res) => {
 
 const brandCreate = async (req, res) => {
 
-    const { name, image } = req.body;
-    const brand = new Brand({ name, image})
+    if (!req.isAdmin) {
+        return res.status(403).json({ message: 'You are not admin'})
+    }
     const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json(errors.array())
+    }
+
+    const { name } = req.body;
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
     
     try {
-        if (!req.isAdmin) {
-            return res.status(403).json({ message: 'You are not admin'})
-        }
-        if (!errors.isEmpty()) {
-            return res.status(400).json(errors.array())
-        }
+
+        const brand = new Brand({ name, image})
         const doc = await brand.save()
         res.status(201).json(doc)
     } catch (err) {
