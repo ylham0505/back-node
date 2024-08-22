@@ -43,7 +43,7 @@ router.post('/upload', upload.single('image'), (req, res) => {
 })
 
 // brand crud
-router.post('/secret/brand', Admin, brandCreateValidation, brandCreate )
+router.post('/secret/brand', Admin, brandCreate )
 router.delete('/secret/brand/:id', Admin, brandDelete )
 router.patch('/secret/brand/:id', Admin, brandUpdate)
 

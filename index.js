@@ -19,7 +19,10 @@ app.use(adminRoutes)
 
 async function start() {
     try {
-        await mongoose.connect('mongodb+srv://ylham:ylhamuseradmin@weterenariya.byg86mu.mongodb.net/?retryWrites=true&w=majority&appName=weterenariya')
+        await mongoose.connect('mongodb+srv://ylham:ylhamuseradmin@weterenariya.byg86mu.mongodb.net/?retryWrites=true&w=majority&appName=weterenariya', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        })
         app.listen(PORT, () => {
             console.log('Server has been started...')
         })
