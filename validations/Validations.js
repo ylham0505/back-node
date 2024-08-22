@@ -12,8 +12,8 @@ const loginValidation = [
 ]
 
 const brandCreateValidation = [
-    body('name', 'brand name will be 3 simbol').isLength({ min: 3}).isString(),
-    body('image', 'image not found bla bla uytgetmeli').optional().isString()
+    body('name', 'brand name will be 3 simbol').isString(),
+    body('image', 'image not found bla bla uytgetmeli').optional()
 ]
 
 const categoryCreateValidation = [
