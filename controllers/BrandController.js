@@ -47,10 +47,9 @@ const brandCreate = async (req, res) => {
     // }
 
     const { name } = req.body;
-    const image = req.file ? `/uploads/${req.file.filename}` : null;
+    const image = req.file ? `/uploads/${req.file.filename}` : '';
     
     try {
-
         const brand = new Brand({ name, image})
         const doc = await brand.save()
         res.status(201).json(doc)

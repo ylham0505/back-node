@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const router = Router()
+const path = require('path');
 const multer = require('multer')
 const { brandCreate, brandDelete, brandUpdate} = require('../controllers/BrandController')
 const { categoryCreate, categoryDelete, categoryUpdate } = require('../controllers/CategoryController')
@@ -18,7 +19,16 @@ const storage = multer.diskStorage({
     }
 })
 
+// const storage = multer.diskStorage({
+//     destination: './public/uploads/',
+//     filename: function (req, file, cb) {
+//         cb(null, Date.now() + path.extname(file.originalname));
+//     }
+// });
+
 const upload = multer({ storage })
+
+// const upload = multer({ dest: 'uploads/' })
 
 const Admin = async (req, res, next) => {
     const token = req.headers.authorization;
@@ -43,7 +53,7 @@ router.post('/upload', upload.single('image'), (req, res) => {
 })
 
 // brand crud
-router.post('/secret/brand', Admin, brandCreate )
+router.post('/secret/brand', Admin, upload.single('brand-photo'), brandCreate )
 router.delete('/secret/brand/:id', Admin, brandDelete )
 router.patch('/secret/brand/:id', Admin, brandUpdate)
 

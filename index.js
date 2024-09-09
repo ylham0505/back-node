@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 app.use('/uploads', express.static('uploads'))
 app.use(express.static(path.join(__dirname,'public')))
+// app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use(userRoutes)
 app.use(adminRoutes)
 
