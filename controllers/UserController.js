@@ -82,7 +82,7 @@ const refreshToken = async (req, res) => {
                 user.JWTtoken = newRefreshToken;
                 user.save();
 
-                const token = jwt.sign({ userId: decode.userId }, 'your_secret_key', { expiresIn: '1h' });
+                const token = jwt.sign({ userId: decode.userId }, 'your_secret_key', { expiresIn: '30d' });
                 console.log(decode.userId);
                 return res.status(200).json({
                     message: 'Token refreshed successfully',
