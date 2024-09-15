@@ -36,8 +36,8 @@ const getOnebrand = async (req, res) => {
 }
 
 const brandCreate = async (req, res) => {
-    console.log('Request body:', req.body);  // Логирование тела запроса
-    console.log('Request file:', req.file);
+    // console.log('Request body:', req.body);  
+    // console.log('Request file:', req.file);
     if (!req.isAdmin) {
         return res.status(403).json({ message: 'You are not admin'})
     }
@@ -76,12 +76,17 @@ const brandDelete = async (req, res) => {
 }
 
 const brandUpdate = async (req, res) => {
+    console.log('Request body:', req.body);  
+    console.log('Request file:', req.file);
+    if (!req.isAdmin) {
+        return res.status(403).json({ message: 'You are not admin'})
+    }
+
+    const brandId = req.params.id
+    const { name } = req.body;
+    const image = req.file ? `/uploads/${req.file.filename}` : '';
+
     try {
-        if (!req.isAdmin) {
-            return res.status(403).json({ message: 'You are not admin'})
-        }
-        const brandId = req.params.id
-        const { name, image } = req.body
         const brand = await Brand.findOneAndUpdate({ _id: brandId }, {name, image} )
         if (!brand) {
             return res.status(404).json({ error: 'Ne udalos nayti brand'})

@@ -29,17 +29,21 @@ const getOneProduct = async (req, res) => {
 }
 
 const productCreate = async (req, res) => {
+    console.log('Request body:', req.body);  
+    console.log('Request file:', req.file);
 
-    const { category_id, subCategory_id, brand_id, name, name_ru, name_en, description, description_ru, description_en, price, image } = req.body
-    const product = new Product({ category_id, subCategory_id, brand_id, name, name_ru, name_en, description, description_ru, description_en, price, image})
+    if (!req.isAdmin) {
+        return res.status(403).json({ message: 'You are not admin'})
+    }
+
+    const { category_id, subCategory_id, brand_id, name, name_ru, name_en, description, description_ru, description_en, price } = req.body
+    const image = req.file ? `/uploads/${req.file.filename}` : '';
     const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json(errors.array())
+    }
     try {
-        if (!req.isAdmin) {
-            return res.status(403).json({ message: 'You are not admin'})
-        }
-        if (!errors.isEmpty()) {
-            return res.status(400).json(errors.array())
-        }
+        const product = new Product({ category_id, subCategory_id, brand_id, name, name_ru, name_en, description, description_ru, description_en, price, image})
         const doc = await product.save()
         res.status(201).json(doc)
     } catch (err) {
@@ -65,13 +69,16 @@ const productDelete = async (req, res) => {
 }
 
 const productUpdate = async (req, res) => {
+
+    if (!req.isAdmin) {
+        return res.status(403).json({ message: 'You are not admin'})
+    }
+    const productId = req.params.id
+    const { category_id, subCategory_id, brand_id, name, name_ru, name_en, description, description_ru, description_en, price } = req.body
+    const image = req.file ? `/uploads/${req.file.filename}` : '';
+
     try {
-        if (!req.isAdmin) {
-            return res.status(403).json({ message: 'You are not admin'})
-        }
-        const productId = req.params.id
-        const { category_id, subCategory_id, brand_id, name, name_ru, name_en, description, description_ru, description_en, price, image } = req.body
-        const products = await Product.findOneAndUpdate({slug: productSlug}, {category_id, subCategory_id, brand_id, name, name_ru, name_en, description, description_ru, description_en, price, image})
+        const products = await Product.findOneAndUpdate({_id: productId}, {category_id, subCategory_id, brand_id, name, name_ru, name_en, description, description_ru, description_en, price, image})
         
         if (!products) {
             return res.status(404).json({ error: 'Ne udalos nayti product'})

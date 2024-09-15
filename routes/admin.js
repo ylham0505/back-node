@@ -55,7 +55,7 @@ router.post('/upload', upload.single('image'), (req, res) => {
 // brand crud
 router.post('/secret/brand', Admin, upload.single('brand-photo'), brandCreate )
 router.delete('/secret/brand/:id', Admin, brandDelete )
-router.patch('/secret/brand/:id', Admin, brandUpdate)
+router.patch('/secret/brand/:id', Admin, upload.single('brand-photo'), brandUpdate)
 
 // category crud
 router.post('/secret/category', Admin, categoryCreateValidation, categoryCreate )
@@ -68,9 +68,9 @@ router.delete('/secret/subcategory/:id', Admin, subCategoryDelete )
 router.patch('/secret/subcategory/:id', Admin, subCategoryUpdate)
 
 // product crud 
-router.post('/secret/product', Admin, productCreateValidation, productCreate )
+router.post('/secret/product', Admin, productCreateValidation, upload.single('product-photo'), productCreate )
 router.delete('/secret/product/:id', Admin, productDelete )
-router.patch('/secret/product/:id', Admin, productUpdate )
+router.patch('/secret/product/:id', Admin, upload.single('product-photo'), productUpdate )
 
 // order
 router.delete('/order/:id', Admin, orderDelete)
