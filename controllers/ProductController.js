@@ -1,5 +1,4 @@
 const Product = require('../models/Product')
-const { validationResult } = require('express-validator')
 
 const getAllProducts = async (req, res) => {
     try {
@@ -38,10 +37,6 @@ const productCreate = async (req, res) => {
 
     const { category_id, subCategory_id, brand_id, name, name_ru, name_en, description, description_ru, description_en, price } = req.body
     const image = req.file ? `/uploads/${req.file.filename}` : '';
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-        return res.status(400).json(errors.array())
-    }
     try {
         const product = new Product({ category_id, subCategory_id, brand_id, name, name_ru, name_en, description, description_ru, description_en, price, image})
         const doc = await product.save()

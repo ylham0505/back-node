@@ -1,6 +1,5 @@
 const Category = require('../models/Category')
 const Product = require('../models/Product')
-const { validationResult } = require('express-validator')
 
 const getAllCategories = async (req, res) => {
     try {
