@@ -35,16 +35,15 @@ const getOneCategory = async (req, res) => {
 
 const categoryCreate = async (req, res) => {
 
-    const { name, name_ru, name_en, image } = req.body;
-    const category = new Category({ name, name_ru, name_en, image })
-    const errors = validationResult(req)
-    try {
-        if (!req.isAdmin) {
+
+    if (!req.isAdmin) {
             return res.status(403).json({ message: 'You are not admin'})
         }
-        if (!errors.isEmpty()) {
-            return res.status(400).json(errors.array())
-        }
+    const { name, name_ru, name_en } = req.body;
+    const image = req.file ? `/uploads/${req.file.filename}` : '';
+    
+    try {
+        const category = new Category({ name, name_ru, name_en, image })
         const doc = await category.save()
         res.status(201).json(doc)
     } catch (err) {
@@ -70,14 +69,15 @@ const categoryDelete = async (req, res) => {
 }
 
 const categoryUpdate = async (req, res) => {
+
+    if (!req.isAdmin) {
+        return res.status(403).json({ message: 'You are not admin'})
+    }
+    const categoryId = req.params.id
+    const { name, name_ru, name_en } = req.body
+    const image = req.file ? `/uploads/${req.file.filename}` : '';
     try {
-        if (!req.isAdmin) {
-            return res.status(403).json({ message: 'You are not admin'})
-        }
-        const categoryId = req.params.id
-        const { name, name_ru, name_en, image } = req.body
         const category = await Category.findOnedAndUpdate( {categoryId}, { name, name_ru, name_en, image })
-        
         if (!category) {
             return res.status(404).json({ error: 'Ne udalos nayti categoriyu'})
         }
