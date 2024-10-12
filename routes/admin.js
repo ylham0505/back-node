@@ -7,7 +7,6 @@ const { categoryCreate, categoryDelete, categoryUpdate } = require('../controlle
 const { subCategoryCreate, subCategoryDelete, subCategoryUpdate } = require('../controllers/SubCategoryController')
 const { productCreate, productDelete, productUpdate } = require('../controllers/ProductController')
 const jwt = require('jsonwebtoken')
-const { brandCreateValidation, categoryCreateValidation, productCreateValidation } = require('../validations/Validations')
 const { orderDelete } = require('../controllers/OrderController')
 
 const storage = multer.diskStorage({
@@ -68,7 +67,7 @@ router.delete('/secret/subcategory/:id', Admin, subCategoryDelete )
 router.patch('/secret/subcategory/:id', Admin, subCategoryUpdate)
 
 // product crud 
-router.post('/secret/product', Admin, productCreateValidation, upload.single('product-photo'), productCreate )
+router.post('/secret/product', Admin, upload.single('product-photo'), productCreate )
 router.delete('/secret/product/:id', Admin, productDelete )
 router.patch('/secret/product/:id', Admin, upload.single('product-photo'), productUpdate )
 
