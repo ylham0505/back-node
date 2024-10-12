@@ -3,7 +3,7 @@ const Product = require('../models/Product')
 
 const getAllCategories = async (req, res) => {
     try {
-        const categories = await Category.find()
+        const categories = await Category.find().populate('subcategories')
         if (!categories) {
             return res.status(404).json({ message: 'Kategoriya ne nayden'})
         }
@@ -17,7 +17,7 @@ const getAllCategories = async (req, res) => {
 const getOneCategory = async (req, res) => {
     try {
         const categoryId = req.params.id
-        const category = await Category.findOne({ _id: categoryId });
+        const category = await Category.findOne({ _id: categoryId }).populate('subcategories');
         if (!category) {
             return res.status(404).json({ message: 'Категория не найдена' });
         }
@@ -39,10 +39,9 @@ const categoryCreate = async (req, res) => {
             return res.status(403).json({ message: 'You are not admin'})
         }
     const { name, name_ru, name_en } = req.body;
-    const image = req.file ? `/uploads/${req.file.filename}` : '';
     
     try {
-        const category = new Category({ name, name_ru, name_en, image })
+        const category = new Category({ name, name_ru, name_en })
         const doc = await category.save()
         res.status(201).json(doc)
     } catch (err) {
@@ -54,7 +53,7 @@ const categoryCreate = async (req, res) => {
 const categoryDelete = async (req, res) => {
     try {
         const categoryId = req.params.id
-        const category = await Category.findOnedAndDelete({ _id: categoryId })
+        const category = await Category.findByIdAndDelete(categoryId)
         if (!req.isAdmin) {
             return res.status(403).json({ message: 'You are not admin'})
         }
@@ -64,6 +63,7 @@ const categoryDelete = async (req, res) => {
         res.status(200).json({ message: 'Deleted succsesfuly'})
     } catch (err) {
         res.status(400).json({ error: 'ne udalos udalit kategoriyu' });
+        console.log(err)
     }
 }
 
@@ -74,9 +74,8 @@ const categoryUpdate = async (req, res) => {
     }
     const categoryId = req.params.id
     const { name, name_ru, name_en } = req.body
-    const image = req.file ? `/uploads/${req.file.filename}` : '';
     try {
-        const category = await Category.findOnedAndUpdate( {categoryId}, { name, name_ru, name_en, image })
+        const category = await Category.findOnedAndUpdate( {categoryId}, { name, name_ru, name_en })
         if (!category) {
             return res.status(404).json({ error: 'Ne udalos nayti categoriyu'})
         }

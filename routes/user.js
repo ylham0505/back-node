@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const { getMe, register, login, refreshToken } = require('../controllers/UserController')
 const { getOnebrand, getAllbrands } = require('../controllers/BrandController')
 const { getOneCategory, getAllCategories } = require('../controllers/CategoryController')
+const { getOneSubCategory, getAllSubCategories } = require('../controllers/SubCategoryController')
 const { getOneProduct, getAllProducts } = require('../controllers/ProductController')
 const { orderCreate } = require('../controllers/OrderController')
 const { registerValidation, loginValidation,  } = require('../validations/Validations')
@@ -36,18 +37,22 @@ const forPage = async (req, res) => {
         
         const skip = (page - 1) * limit
         const brands = await Brand.find({}, 'name')
-        const categories = await Category.find({}, 'name name_ru name_en')
+        const categories = await Category.find().populate('subcategories')
         const products = await Product.find().populate('category_id subCategory_id brand_id', '_id name name_ru name_en').skip(skip).limit(limit)
+        const subcategories = await SubCategory.find().populate('parentCategory')
         if (!brands) {
             return res.status(404).json({ message: 'Brand ne nayden'})
         }
         if (!categories) {
             return res.status(404).json({ message: 'Категории не найдены' });
         }
+        if (!subcategories) {
+            return res.status(404).json({ message: 'Subcategory не найдены' });
+        }
         if (!products) {
             return res.status(404).json({ message: 'Продукты не найдены' });
         }
-        res.status(200).json({brands, categories, products, currentPage: page,})
+        res.status(200).json({brands, categories, subcategories, products, currentPage: page,})
     } catch (err) {
         console.log(err)
         res.status(400).json({ error: 'Osybka w kode' });
@@ -90,6 +95,10 @@ router.get('/brand/:id', getOnebrand)  //authenticateUser
 router.get('/categories', getAllCategories)
 
 router.get('/category/:id',  getOneCategory)  //authenticateUser
+
+router.get('/subcategories', getAllSubCategories)
+
+router.get('/subcategory/:id',  getOneSubCategory)  //authenticateUser
 
 router.get('/products', getAllProducts)
 

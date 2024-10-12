@@ -58,9 +58,9 @@ router.delete('/secret/brand/:id', Admin, brandDelete )
 router.patch('/secret/brand/:id', Admin, upload.single('brand-photo'), brandUpdate)
 
 // category crud
-router.post('/secret/category', Admin, upload.single('category-photo'), categoryCreate )
+router.post('/secret/category', Admin, categoryCreate )
 router.delete('/secret/category/:id', Admin, categoryDelete )
-router.patch('/secret/category/:id', Admin, upload.single('category-photo'), categoryUpdate)
+router.patch('/secret/category/:id', Admin, categoryUpdate)
 
 // subCategory crud
 router.post('/secret/subcategory', Admin, subCategoryCreate )
