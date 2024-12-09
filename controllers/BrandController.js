@@ -1,6 +1,5 @@
 const Brand = require('../models/Brand')
 const Product = require('../models/Product')
-const { validationResult } = require('express-validator')
 
 const getAllbrands = async (req, res) => {
     try {
